@@ -77,7 +77,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         let rows = fetchedResultsController.sections![section].numberOfObjects
-        println(rows)
         return rows
     }
     
