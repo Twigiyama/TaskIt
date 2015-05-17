@@ -18,8 +18,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var versionLabel: UILabel!
     
     let kVersionNumber = "1.0"
-    let kShouldCapitaliseTaskKey = "shouldCapitaliseTask"
-    let kShouldCompleteNewTodoKey = "shouldCompleteNewTodo"
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +38,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         
         var doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("doneBarButtonItemPressed:"))
         self.navigationItem.leftBarButtonItem = doneButton
+        self.versionLabel.text = kVersionNumber
         
         
     }
@@ -132,9 +132,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         }
         NSUserDefaults.standardUserDefaults().synchronize()
         tableView.reloadData()
-        }
-    }
+}
 
 
 
 
+}
