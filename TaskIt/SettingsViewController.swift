@@ -39,7 +39,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         var doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("doneBarButtonItemPressed:"))
         self.navigationItem.leftBarButtonItem = doneButton
         self.versionLabel.text = kVersionNumber
-        
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "Background")!)
+
         
     }
 

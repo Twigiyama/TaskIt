@@ -9,6 +9,12 @@
 import UIKit
 import CoreData
 
+protocol AddTaskViewControllerDelegate {
+    
+    func addTask(message: String)
+    func addTaskCanceled(message: String)
+}
+
 class AddTaskViewController: UIViewController {
 
    
@@ -17,9 +23,12 @@ class AddTaskViewController: UIViewController {
     @IBOutlet weak var subTaskTextField: UITextField!
     @IBOutlet weak var datePicker: UIDatePicker!
     
+    var delegate: AddTaskViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "Background")!)
+
 
         // Do any additional setup after loading the view.
     }
@@ -30,8 +39,11 @@ class AddTaskViewController: UIViewController {
     }
     
     @IBAction func cancelButtonTapped(sender: UIButton) {
-        
+
+    
         self.dismissViewControllerAnimated(true, completion: nil)
+        delegate?.addTask("Task was not added")
+        
     }
 
     @IBAction func addTaskButtonTapped(sender: UIButton) {
@@ -71,8 +83,10 @@ class AddTaskViewController: UIViewController {
         for res in results {
             println(res)
         }
-        
+
         self.dismissViewControllerAnimated(true, completion: nil)
+        delegate?.addTask("task Added")
+
     }
     /*
     // MARK: - Navigation

@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate, TaskDetailViewControllerDelegate, AddTaskViewControllerDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     
@@ -29,6 +29,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         fetchedResultsController.delegate = self
         fetchedResultsController.performFetch(nil)
         println(fetchedResultsController.description)
+        
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "Background")!)
+        
 
     }
     
@@ -52,6 +55,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             let indexPath = self.tableView.indexPathForSelectedRow()
             let thisTask = fetchedResultsController.objectAtIndexPath(indexPath!) as TaskModel
             detailVC.detailTaskModel = thisTask
+            detailVC.delegate = self
      
             
         }
@@ -59,6 +63,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         else if segue.identifier == "showTaskAdd" {
             
             let addTaskVC: AddTaskViewController = segue.destinationViewController as AddTaskViewController
+            addTaskVC.delegate = self
   
         }
     }
@@ -134,6 +139,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        cell.backgroundColor = UIColor.clearColor()
+    }
+    
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
 
         let thisTask = fetchedResultsController.objectAtIndexPath(indexPath) as TaskModel
@@ -172,7 +181,26 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return fetchedResultsController
     }
     
-
+    //TaskDetailViewControllerDelegate
+    func taskDetailEdited() {
+        showAlert()
+    }
+    
+    func addTask(message: String) {
+        showAlert(message: message)
+    }
+    
+    func addTaskCanceled(message: String) {
+        showAlert(message: message)
+    }
+    
+    
+    func showAlert(message: String = "Congratulations") {
+        var alert = UIAlertController(title: "Change Made!", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+        self.presentViewController(alert,
+            animated: true, completion: nil)
+    }
 
 }
 
