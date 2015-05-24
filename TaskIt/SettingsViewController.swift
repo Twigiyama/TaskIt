@@ -58,7 +58,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if tableView == self.capitaliseTableView {
             
-            var capitaliseCell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("capitaliseCell") as UITableViewCell
+            var capitaliseCell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("capitaliseCell") as! UITableViewCell
             if indexPath.row == 0 {
                 capitaliseCell.textLabel?.text = "Do not capitalise"
                 if NSUserDefaults.standardUserDefaults().boolForKey(kShouldCapitaliseTaskKey) == false {
@@ -80,7 +80,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         }
         
         else {
-            var cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("completeNewTodoCell") as UITableViewCell
+            var cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("completeNewTodoCell") as! UITableViewCell
             if indexPath.row == 0 {
                 cell.textLabel?.text = "Do not complete Task"
                 if NSUserDefaults.standardUserDefaults().boolForKey(kShouldCompleteNewTodoKey) == false {

@@ -14,7 +14,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     @IBOutlet weak var tableView: UITableView!
     
-    let managedObjectContext = (UIApplication.sharedApplication().delegate as AppDelegate).managedObjectContext
+    
     var fetchedResultsController: NSFetchedResultsController = NSFetchedResultsController()
     
     // var taskArray: [TaskModel] = []
@@ -32,6 +32,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         self.view.backgroundColor = UIColor(patternImage: UIImage(named: "Background")!)
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("iCloudUpdated"), name: "coreDataUpdated", object: nil)
 
     }
     
@@ -51,9 +52,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         if segue.identifier == "showTaskDetail" {
             
-            let detailVC: TaskDetailViewController = segue.destinationViewController as TaskDetailViewController
+            let detailVC: TaskDetailViewController = segue.destinationViewController as! TaskDetailViewController
             let indexPath = self.tableView.indexPathForSelectedRow()
-            let thisTask = fetchedResultsController.objectAtIndexPath(indexPath!) as TaskModel
+            let thisTask = fetchedResultsController.objectAtIndexPath(indexPath!) as! TaskModel
             detailVC.detailTaskModel = thisTask
             detailVC.delegate = self
      
@@ -62,7 +63,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         else if segue.identifier == "showTaskAdd" {
             
-            let addTaskVC: AddTaskViewController = segue.destinationViewController as AddTaskViewController
+            let addTaskVC: AddTaskViewController = segue.destinationViewController as! AddTaskViewController
             addTaskVC.delegate = self
   
         }
@@ -89,9 +90,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         println(indexPath.row)
         
-        let taskItem: TaskModel = fetchedResultsController.objectAtIndexPath(indexPath) as TaskModel
+        let taskItem: TaskModel = fetchedResultsController.objectAtIndexPath(indexPath) as! TaskModel
         
-        var cell: TaskCell = tableView.dequeueReusableCellWithIdentifier("myCell") as TaskCell
+        var cell: TaskCell = tableView.dequeueReusableCellWithIdentifier("myCell") as! TaskCell
         
         cell.taskLabel.text = taskItem.task
         cell.descriptionLabel.text = taskItem.subtask
@@ -119,7 +120,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
         if fetchedResultsController.sections?.count == 1 {
             let fetchedObjects = fetchedResultsController.fetchedObjects!
-            let testTask:TaskModel = fetchedObjects[0] as TaskModel
+            let testTask:TaskModel = fetchedObjects[0] as! TaskModel
             if testTask.completed == true {
                 return "Completed"
             }
@@ -145,7 +146,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
 
-        let thisTask = fetchedResultsController.objectAtIndexPath(indexPath) as TaskModel
+        let thisTask = fetchedResultsController.objectAtIndexPath(indexPath) as! TaskModel
         
         if thisTask.completed == 0 {
             thisTask.completed = 1
@@ -154,7 +155,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         }
     
-        (UIApplication.sharedApplication().delegate as AppDelegate).saveContext()
+        ModelManager.instance.saveContext()
         
     }
     
@@ -177,7 +178,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func getFetchedResultsController() -> NSFetchedResultsController {
-            fetchedResultsController = NSFetchedResultsController(fetchRequest: taskFetchRequest(), managedObjectContext: managedObjectContext!, sectionNameKeyPath: "completed", cacheName: nil)
+            fetchedResultsController = NSFetchedResultsController(fetchRequest: taskFetchRequest(), managedObjectContext: ModelManager.instance.managedObjectContext!, sectionNameKeyPath: "completed", cacheName: nil)
         return fetchedResultsController
     }
     
@@ -200,6 +201,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert,
             animated: true, completion: nil)
+    }
+    
+    //iCloud Notification
+    func iCloudUpated() {
+        tableView.reloadData()
     }
 
 }

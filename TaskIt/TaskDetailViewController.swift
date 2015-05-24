@@ -54,14 +54,14 @@ class TaskDetailViewController: UIViewController {
         
         mainVC.baseArray[0][mainVC.tableView.indexPathForSelectedRow()!.row] = task */
         
-        let appDelegate = (UIApplication.sharedApplication().delegate as AppDelegate)
+        let appDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
         
         detailTaskModel.task = taskTextField.text
         detailTaskModel.subtask = subTaskTextField.text
         detailTaskModel.date = dueDatePicker.date
         detailTaskModel.completed = detailTaskModel.completed
         
-        appDelegate.saveContext()
+        ModelManager.instance.saveContext()
         
         self.navigationController?.popViewControllerAnimated(true)
         delegate?.taskDetailEdited!()
